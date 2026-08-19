@@ -5,6 +5,7 @@ from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
@@ -21,7 +22,9 @@ app = FastAPI(
 )
 
 # Chargement du modèle d'embedding (local)
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
+    huggingfacehub_api_token=os.getenv("HUGGINGFACEHUB_API_TOKEN")
+    )
 
 # 2. Récupérer la clé d'API depuis .env
 groq_api_key = os.getenv("GROQ_API_KEY")
