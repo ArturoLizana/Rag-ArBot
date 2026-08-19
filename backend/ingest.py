@@ -4,14 +4,17 @@ from typing import List, Union
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 from langchain_community.vectorstores import Chroma
 
 # Dossier par défaut pour persister ChromaDB sous Windows
 CHROMA_DB_DIR = os.path.join(os.path.dirname(__file__), "..", "chroma_db")
 
-# Initialisation du modèle d'embedding gratuit (s'exécute localement)
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+# Initialisation identique pour l'ingestion
+embeddings = HuggingFaceInferenceAPIEmbeddings(
+    api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
 
 
 def load_pdf(file_path: str) -> List[Document]:

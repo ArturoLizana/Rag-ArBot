@@ -4,7 +4,7 @@ from typing import List, Optional
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from pydantic import BaseModel
 from langchain_community.vectorstores import Chroma
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
@@ -20,8 +20,8 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Chargement du modèle d'embedding (local)
-embeddings = HuggingFaceEndpointEmbeddings(
+# Chargement des embeddings via l'API HF (ultra-léger, sans PyTorch)
+embeddings = HuggingFaceInferenceAPIEmbeddings(
     api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
