@@ -1,5 +1,6 @@
 import os
 import requests
+from dotenv import load_dotenv
 from typing import List, Union
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader
 from langchain_core.documents import Document
@@ -7,12 +8,18 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 from langchain_community.vectorstores import Chroma
 
-# Dossier par défaut pour persister ChromaDB sous Windows
+# 1. Charger explicitement les variables d'environnement
+load_dotenv()
+
+# Dossier par défaut pour persister ChromaDB
 CHROMA_DB_DIR = os.path.join(os.path.dirname(__file__), "..", "chroma_db")
 
-# Initialisation identique pour l'ingestion
+# 2. Récupération sécurisée du token
+hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
+
+# Initialisation des embeddings
 embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
+    api_key=hf_token,
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
