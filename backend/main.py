@@ -2,6 +2,7 @@ import os
 import shutil
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
@@ -20,9 +21,20 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# ACTIVATION DU CORS (Obligatoire pour l'interface Streamlit)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Chargement des embeddings via l'API HF (ultra-léger, sans PyTorch)
+hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
+
 embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN"),
+    api_key=hf_token,
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
