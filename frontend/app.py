@@ -8,7 +8,7 @@ st.set_page_config(
     layout="wide"
 )
 
-API_BASE_URL = "https://rag-arbot.onrender.com"
+API_BASE_URL = "https://rag-backend-wp9f.onrender.com/"
 
 # --- Style CSS personnalisé ---
 st.markdown("""
