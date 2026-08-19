@@ -5,7 +5,7 @@ from typing import List, Union
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_community.vectorstores import Chroma
 
 # 1. Charger explicitement les variables d'environnement
@@ -17,10 +17,10 @@ CHROMA_DB_DIR = os.path.join(os.path.dirname(__file__), "..", "chroma_db")
 # 2. Récupération sécurisée du token
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
 
-# Initialisation des embeddings
-embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key=hf_token,
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+embeddings = HuggingFaceEndpointEmbeddings(
+    model="sentence-transformers/all-MiniLM-L6-v2",
+    task="feature-extraction",
+    huggingfacehub_api_token=hf_token
 )
 
 

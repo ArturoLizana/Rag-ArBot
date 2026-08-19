@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
@@ -33,9 +33,10 @@ app.add_middleware(
 # Chargement des embeddings via l'API HF (ultra-léger, sans PyTorch)
 hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
 
-embeddings = HuggingFaceInferenceAPIEmbeddings(
-    api_key=hf_token,
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+embeddings = HuggingFaceEndpointEmbeddings(
+    model="sentence-transformers/all-MiniLM-L6-v2",
+    task="feature-extraction",
+    huggingfacehub_api_token=hf_token
 )
 
 # 2. Récupérer la clé d'API depuis .env
